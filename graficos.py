@@ -1,0 +1,265 @@
+import plotly.graph_objects as go
+import plotly.express as px
+import streamlit as st
+import pandas as pd
+
+def graf_ev_lect_atraso_ritmo(
+        df,
+        col_leidos,
+        titulo="Evolución diaria de lecturas",
+        key="grafico",
+        titulo_col_leidos="Lecturas realizadas",
+        mostrar_markers=True
+    ):
+
+    df_evol = df.groupby(df["f_lteor"].dt.date).agg({
+        "total_programados":"sum",
+        col_leidos:"sum"
+    }).reset_index()
+
+    df_evol = df_evol.rename(columns={"f_lteor":"fecha"})
+
+    df_graf = df_evol.rename(columns={
+        "total_programados": "Lecturas programadas",
+        col_leidos: titulo_col_leidos
+    })
+
+    # atraso
+    df_graf["Atraso diario"] = (
+        df_graf["Lecturas programadas"] -
+        df_graf[titulo_col_leidos]
+    )
+
+    # ritmo ideal
+    total_programado = df_graf["Lecturas programadas"].sum()
+    total_dias = len(df_graf)
+
+    df_graf["dia_n"] = range(1, total_dias + 1)
+
+    df_graf["Ritmo ideal"] = (
+        total_programado / total_dias
+    ) * df_graf["dia_n"]
+
+    df_graf["fecha"] = pd.to_datetime(df_graf["fecha"]).dt.strftime("%d")
+
+    fig = go.Figure()
+
+    mode = "lines+markers+text" if mostrar_markers else "lines"
+
+    # PROGRAMADOS
+    fig.add_trace(go.Scatter(
+        x=df_graf["fecha"],
+        y=df_graf["Lecturas programadas"],
+        mode=mode,
+        name="Lecturas programadas",
+        line=dict(color="#2563eb"),
+        text=df_graf["Lecturas programadas"] if mostrar_markers else None,
+        texttemplate="%{text:,.0f}" if mostrar_markers else None,
+        textposition="top center"
+    ))
+
+    # LEIDOS
+    fig.add_trace(go.Scatter(
+        x=df_graf["fecha"],
+        y=df_graf[titulo_col_leidos],
+        mode=mode,
+        name=titulo_col_leidos,
+        line=dict(color="#16a34a"),
+        text=df_graf[titulo_col_leidos] if mostrar_markers else None,
+        texttemplate="%{text:,.0f}" if mostrar_markers else None,
+        textposition="bottom center",
+        fill="tonexty",
+        fillcolor="rgba(239,68,68,0.25)"
+    ))
+
+    # RITMO IDEAL
+    fig.add_trace(go.Scatter(
+        x=df_graf["fecha"],
+        y=df_graf["Ritmo ideal"],
+        mode="lines",
+        name="Ritmo ideal",
+        line=dict(
+            color="#f59e0b",
+            dash="dash",
+            width=3
+        )
+    ))
+
+    fig.update_layout(
+        title=titulo,
+        xaxis_title="Día de lectura",
+        yaxis_title="Cantidad de lecturas",
+        yaxis=dict(tickformat=",")
+    )
+
+    fig.update_xaxes(type="category"
+                    #  ,  
+                    #  tickangle=-45
+                     )  # 👈 SOLUCIÓN
+
+    st.plotly_chart(fig, use_container_width=True, key=key)
+
+
+
+
+
+def graf_ev_lect(
+        df,
+        col_leidos,
+        titulo="Evolución diaria de lecturas",
+        key="grafico",
+        titulo_col_leidos="Lecturas realizadas",
+        mostrar_val=False
+    ):
+    df_evol = df.groupby(df["f_lteor"].dt.date).agg({
+        "total_programados":"sum",
+        col_leidos:"sum"
+    }).reset_index()
+
+    df_evol = df_evol.rename(columns={"f_lteor":"fecha"})
+
+    df_graf = df_evol.rename(columns={
+        "total_programados": "Lecturas programadas",
+        col_leidos: titulo_col_leidos
+    })
+
+    # import plotly.express as px
+    # df_graf["fecha"] = pd.to_datetime(df_graf["fecha"]).dt.strftime("%d-%m")
+    # df_graf["fecha"] = pd.to_datetime(df_graf["fecha"]).dt.strftime("%d-%m-%Y")
+    df_graf["fecha"] = pd.to_datetime(df_graf["fecha"]).dt.strftime("%d")
+
+    fig = px.line(
+        df_graf,
+        x="fecha",
+        y=["Lecturas programadas", titulo_col_leidos],
+        labels={
+            "fecha": "Día de lectura",
+            "value": "Cantidad de lecturas",
+            "variable": "Tipo"
+        },
+        markers=True,
+        title=titulo,
+        color_discrete_sequence=[
+        "#ff0a0a",  # azul programados
+        "#1322ff",  # verde leídos
+     ]
+    )
+
+    fig.update_layout(
+        yaxis=dict(
+            tickformat=","
+        )
+    )
+
+    fig.update_xaxes(type="category"
+                    #  ,  
+                    #  tickangle=-45
+                     )  # 👈 SOLUCIÓN
+
+    if mostrar_val:
+        for trace in fig.data:
+            trace.text = trace.y
+            trace.texttemplate = '%{text:,.0f}'
+            trace.textposition = 'top center'
+            trace.mode = 'lines+markers+text'
+
+    st.plotly_chart(fig, use_container_width=True, key=key)
+
+
+
+
+
+
+
+# import pandas as pd
+# import plotly.graph_objects as go
+# import streamlit as st
+
+
+def graf_proyeccion_atraso(
+        df,
+        col_leidos="total_leidos_ftl",
+        titulo="Proyección de atraso / adelanto",
+        key="graf_proy"
+    ):
+
+    # Agrupar por fecha
+    df_gap = df.groupby(df["f_lteor"].dt.date).agg({
+        "total_programados": "sum",
+        col_leidos: "sum"
+    }).reset_index()
+
+    df_gap = df_gap.rename(columns={
+        "f_lteor": "fecha",
+        col_leidos: "leidos"
+    })
+
+    # acumulados
+    df_gap["prog_acum"] = df_gap["total_programados"].cumsum()
+    df_gap["leidos_acum"] = df_gap["leidos"].cumsum()
+
+    # promedio diario programado
+    promedio_dia = df_gap["total_programados"].mean()
+
+    # gap en días
+    df_gap["gap_dias"] = (
+        (df_gap["leidos_acum"] - df_gap["prog_acum"])
+        / promedio_dia
+    )
+
+    # atraso positivo
+    df_gap["gap_dias"] = df_gap["gap_dias"] * -1
+
+    # formatear fecha
+    df_gap["fecha_str"] = pd.to_datetime(df_gap["fecha"]).dt.strftime("%d-%m")
+
+    fig = go.Figure()
+
+    # linea principal
+    fig.add_trace(go.Scatter(
+        x=df_gap["fecha_str"],
+        y=df_gap["gap_dias"],
+        mode="lines+markers+text",
+        name="Gap (días)",
+        text=df_gap["gap_dias"].round(1),
+        textposition="top center",
+        line=dict(
+            width=4,
+            color="#22c55e"
+        ),
+        marker=dict(size=8)
+    ))
+
+    # barras atraso
+    fig.add_trace(go.Bar(
+        x=df_gap["fecha_str"],
+        y=df_gap["gap_dias"].clip(lower=0),
+        name="Atraso",
+        marker_color="rgba(239,68,68,0.5)"
+    ))
+
+    # línea cero
+    fig.add_hline(
+        y=0,
+        line_dash="dash",
+        line_color="white"
+    )
+
+    fig.update_layout(
+        title=titulo,
+        xaxis_title="Día",
+        yaxis_title="Gap en días de trabajo",
+        xaxis_tickangle=-90,
+        yaxis=dict(
+            tickformat=".1f"
+        ),
+        legend=dict(
+            orientation="h",
+            y=1.1
+        ),
+        height=500
+    )
+
+    fig.update_xaxes(type="category")
+
+    st.plotly_chart(fig, use_container_width=True, key=key)
