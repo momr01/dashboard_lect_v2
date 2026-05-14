@@ -14,4 +14,13 @@ def page_avance(df_filtrado):
         mostrar_val=True
     )
 
+    graf_ev_lect(
+            df_filtrado,
+            col_leidos="total_leidos_ftl",
+            titulo="Evolución diaria de lecturas s/FTL",
+            key="ev_filtrado_ftl_val",
+            titulo_col_leidos="Lecturas realizadas s/FTL",
+            mostrar_val=True
+        )
+
    

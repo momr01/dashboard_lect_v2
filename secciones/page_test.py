@@ -1118,7 +1118,7 @@ def page_test(df_filtrado, dias_transcurridos, total_programados, hoy,
 
 
     st.dataframe(
-        df_heatmap.style.applymap(color_avance, subset=["avance_pct"])
+        df_heatmap.style.map(color_avance, subset=["avance_pct"])
         .format({
             "avance_pct": "{:.1f}%"
         }),

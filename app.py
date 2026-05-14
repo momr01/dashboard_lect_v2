@@ -1479,30 +1479,30 @@ def mostrar_avance_descarga_kpi3():
 ################### ACAAAAAAAAAAAAAAAAAAA
 
 
-st.markdown("""
-<style>
-.kpi-btn button {
-    width: 100%;
-    height: 120px;
-    border-radius: 14px;
-    border: 2px solid;
-    background: white;
-    padding: 10px;
-    text-align: center;
-    font-size: 16px;
-}
+# st.markdown("""
+# <style>
+# .kpi-btn button {
+#     width: 100%;
+#     height: 120px;
+#     border-radius: 14px;
+#     border: 2px solid;
+#     background: white;
+#     padding: 10px;
+#     text-align: center;
+#     font-size: 16px;
+# }
 
-.kpi-title {
-    font-size: 14px;
-    color: black;
-}
+# .kpi-title {
+#     font-size: 14px;
+#     color: black;
+# }
 
-.kpi-value {
-    font-size: 32px;
-    font-weight: bold;
-}
-</style>
-""", unsafe_allow_html=True)
+# .kpi-value {
+#     font-size: 32px;
+#     font-weight: bold;
+# }
+# </style>
+# """, unsafe_allow_html=True)
 
 
 
@@ -1831,11 +1831,226 @@ def kpi_card(title, value, color, key):
 #     with col3:
 #         if st.button(f"PEND\n{porcentaje_pendientes:.2f}%", use_container_width=True):
 #             go_to("detalle", "pendientes")
+
+
+
+
+# st.markdown("""
+# <style>
+
+# .kpi-card{
+#     //background: linear-gradient(145deg,#111827,#1f2937);
+#     //background: linear-gradient(145deg,#31405E,#445069);
+#     border-radius:14px;
+#     padding:32px;
+#     text-align:center;
+#     border:2px solid;
+#     box-shadow:0 4px 14px rgba(0,0,0,0.35);
+#     transition:0.2s;
+#     margin: 20px 0;
+# }
+
+# .kpi-card:hover{
+#     transform:translateY(-4px);
+#     box-shadow:0 10px 22px rgba(0,0,0,0.45);
+# }
+
+# .kpi-title{
+#     font-size:24px;
+#     //color:#9ca3af;
+#     //color: white;
+#     margin-bottom:6px;
+#     font-weight: bold;
+# }
+
+# .kpi-value{
+#     font-size:54px;
+#     font-weight:700;
+# }
+
+# .kpi-sub{
+#     font-size:13px;
+#     //color:#9ca3af;
+#     color: black;
+#     margin-top:6px;
+# }
+            
+
+# div[data-testid="stButton"] button {
+#     background: transparent;
+#     border: none;
+#     height: 100%;
+# }
+
+# /* CONTENEDOR DEL MODAL */
+# div[data-testid="stDialog"] div[role="dialog"] {
+#     width: 90vw !important;
+#     max-width: 90vw !important;
+# }
+
+# /* CONTENIDO SCROLLEABLE */
+# div[data-testid="stDialog"] div[role="dialog"] > div {
+#     max-height: 85vh;
+#     overflow-y: auto;
+#     padding-right: 10px;
+# }
+
+# /* evita ese fondo raro abajo */
+# div[data-testid="stDialog"] {
+#     background: rgba(0,0,0,0.4);
+# }
+            
+
+
+# </style>
+# """, unsafe_allow_html=True)
+
+# def kpi_visual(titulo, valor, color, sub=""):
+    
+#     st.markdown(
+#         f"""
+#         <div class="kpi-card" style="border-color:{color}">
+#             <div class="kpi-title">{titulo}</div>
+#             <div class="kpi-value" style="color:{color}">
+#                 {valor}
+#             </div>
+#             <div class="kpi-sub">{sub}</div>
+#         </div>
+#         """,
+#         unsafe_allow_html=True
+#     )
+
+# def kpi_visual(titulo, valor, color, key, sub=""):
+
+#     clicked = st.button(
+#         "",
+#         key=key,
+#         use_container_width=True
+#     )
+
+#     st.markdown(
+#         f"""
+#         <style>
+#         div[data-testid="stButton"][key="{key}"] > button {{
+#             position: absolute;
+#             inset: 0;
+#             opacity: 0;
+#             z-index: 10;
+#             cursor: pointer;
+#         }}
+
+#         .kpi-wrapper-{key} {{
+#             position: relative;
+#         }}
+#         </style>
+
+#         <div class="kpi-wrapper-{key}">
+#             <div class="kpi-card" style="border-color:{color}">
+#                 <div class="kpi-title">{titulo}</div>
+
+#                 <div class="kpi-value" style="color:{color}">
+#                     {valor}
+#                 </div>
+
+#                 <div class="kpi-sub">{sub}</div>
+#             </div>
+#         </div>
+#         """,
+#         unsafe_allow_html=True
+#     )
+
+#     return clicked
+
+from streamlit_card import card
+
+
+# st.markdown("""
+# <style>
+
+# div[data-testid="column"] {
+#     padding-left: 0.25rem !important;
+#     padding-right: 0.25rem !important;
+# }
+
+# .kpi-card{
+#     min-height: 120px;
+#     padding: 12px;
+#     border-radius: 14px;
+#     border: 2px solid;
+#     background: #111827;
+
+#     display:flex;
+#     flex-direction:column;
+#     justify-content:center;
+
+#     overflow:hidden;
+# }
+
+# .kpi-title{
+#     font-size: clamp(11px, 1vw, 16px);
+#     font-weight:600;
+#     line-height:1.2;
+# }
+
+# .kpi-value{
+#     font-size: clamp(18px, 2vw, 34px);
+#     font-weight:700;
+#     line-height:1.1;
+
+#     word-break: break-word;
+# }
+
+# .kpi-sub{
+#     font-size: clamp(10px, 0.8vw, 14px);
+# }
+
+# </style>
+# """, unsafe_allow_html=True)
+
+
+st.markdown("""
+<style>
+.block-container{
+    padding-top: 1.3rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# def kpi_visual(titulo, valor, color, key, sub=""):
+
+#     clicked = card(
+#         key=key,
+#         title=titulo,
+#         text=valor,
+#         styles={
+#             "card": {
+#                 "width": "100%",
+#                 "border": f"2px solid {color}",
+#                 "border-radius": "15px",
+#                 "padding": "10px",
+#             },
+#             "text": {
+#                 "color": color,
+#                 "font-size": "28px",
+#                 "font-weight": "bold",
+#             },
+#             "title": {
+#                 "font-size": "16px",
+#                 "font-weight": "600",
+#             }
+#         }
+#     )
+
+#     return clicked
+
+
 def render_home():
 
     # st.title("Dashboard")
 
-    col1, col2, col3, col4 = st.columns(4, gap="small")
+    col1, col2, col3 = st.columns(3, gap="small")
 
     with col1:
         if kpi_card("ATRASO", f"{kpi_atraso}", "#f01212", "k1"):
@@ -1849,14 +2064,16 @@ def render_home():
         if kpi_card("📊 AVANCE", f"{avance_descarga:.2f}%", "#22c55e", "k3"):
             go_to("detalle", "avance")
 
-    with col4:
-        if kpi_card("% LECTURAS PENDIENTES", f"{porcentaje_pendientes:.2f}%", "#f59e0b", "k4"):
-            go_to("detalle", "pendientes")
+    
 
     
 
 
-    col5, col6, col7, col8 = st.columns(4, gap="small")
+    col4, col5, col6 = st.columns(3, gap="small")
+
+    with col4:
+        if kpi_card("% LECTURAS PENDIENTES", f"{porcentaje_pendientes:.2f}%", "#f59e0b", "k4"):
+            go_to("detalle", "pendientes")
 
     with col5:
         if kpi_card("LECTURAS DESCARGADAS", f"{lecturas_descargadas:,.0f}", "#2ed12e", "k5"):
@@ -1866,20 +2083,39 @@ def render_home():
         if kpi_card("LECTURAS PENDIENTES",  f"{lecturas_pendientes_total:,.0f}", "#ff1d1d", "k6"):
             go_to("detalle", "reglamentarios")
 
+    
+
+    
+    
+
+    col7, col8, col9 = st.columns(3)
+
     with col7:
         if kpi_card("PROMEDIO REQUERIDO A DESCARGAR",   f"{promedio_requerido:,.0f} / día", "#c210ee", "k7"):
             go_to("detalle", "avance")
-
+            
     with col8:
         if kpi_card("ANOMALIAS PENDIENTES T2 ", "133", "#aa2f54", "k8"):
             go_to("detalle", "anomalias")
-    
-
-    col9, col10 = st.columns(2)
 
     with col9:
         if kpi_card("TEST", "prueba", "#452261", "k9"):
             go_to("detalle", "test")
+
+    # with col10:
+    #     if kpi_visual(
+    #         "ATRASO",
+    #         f"{kpi_atraso2}",
+    #         "#ef4444",
+    #         "k10"
+    #     ):
+    #         go_to("detalle", "test")
+    # with col10:
+    #     kpi_visual(
+    #         "ATRASO",
+    #         f"{kpi_atraso2}",
+    #         "#ef4444"
+    #     )
 
 # def render_detalle():
 
