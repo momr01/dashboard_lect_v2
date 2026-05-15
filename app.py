@@ -2202,12 +2202,12 @@ elif st.session_state.page == "detalle":
 
 
 
-pdf = generar_pdf()
+# pdf = generar_pdf()
 
-st.download_button(
-    label="📄 Descargar Reporte",
-    data=pdf,
-    file_name="reporte_dashboard.pdf",
-    mime="application/pdf",
-    key="123456"
-)
+# st.download_button(
+#     label="📄 Descargar Reporte",
+#     data=pdf,
+#     file_name="reporte_dashboard.pdf",
+#     mime="application/pdf",
+#     key="123456"
+# )
