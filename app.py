@@ -14,6 +14,7 @@ from secciones.page_pend import page_pend
 from secciones.page_plazos import page_plazos
 from secciones.page_test import page_test
 from secciones.page_anomalias import page_anomalias
+from reportes.reportes import generar_pdf
 
 # -----------------------------------
 # CONFIG
@@ -2093,7 +2094,7 @@ def render_home():
     with col7:
         if kpi_card("PROMEDIO REQUERIDO A DESCARGAR",   f"{promedio_requerido:,.0f} / día", "#c210ee", "k7"):
             go_to("detalle", "avance")
-            
+
     with col8:
         if kpi_card("ANOMALIAS PENDIENTES T2 ", "133", "#aa2f54", "k8"):
             go_to("detalle", "anomalias")
@@ -2200,3 +2201,13 @@ elif st.session_state.page == "detalle":
 
 
 
+
+pdf = generar_pdf()
+
+st.download_button(
+    label="📄 Descargar Reporte",
+    data=pdf,
+    file_name="reporte_dashboard.pdf",
+    mime="application/pdf",
+    key="123456"
+)
