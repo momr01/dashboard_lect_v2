@@ -2211,3 +2211,13 @@ elif st.session_state.page == "detalle":
 #     mime="application/pdf",
 #     key="123456"
 # )
+
+
+pdf = generar_pdf()
+
+st.download_button(
+    label="📄 Descargar Reporte",
+    data=pdf,
+    file_name="reporte_dashboard.pdf",
+    mime="application/pdf"
+)
