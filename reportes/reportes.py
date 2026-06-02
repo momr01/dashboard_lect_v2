@@ -106,8 +106,16 @@ def generar_pdf(realvsprog, df_filtrado, kpi_atraso, kpi_reglamentarios, avance_
     # TITULO PRINCIPAL
     # ==========================================
 
+    # titulo = Paragraph(
+    #     "<b><u>Estado actual de anomalías T2 / descarga de lecturas</u></b>",
+    #     styles["Title"]
+    # )
+    from datetime import datetime
+
+    fecha_actual = datetime.now().strftime("%d/%m/%Y")
+
     titulo = Paragraph(
-        "<b>Estado actual de anomalías T2 / descarga de lecturas</b>",
+        f"<b><u>Estado actual de anomalías T2 / descarga de lecturas {fecha_actual}</u></b>",
         styles["Title"]
     )
 
@@ -858,6 +866,85 @@ def generar_pdf(realvsprog, df_filtrado, kpi_atraso, kpi_reglamentarios, avance_
 
 
 
+
+
+
+    # from reportlab.platypus import Table, TableStyle
+    # from reportlab.lib import colors
+    # from reportlab.lib.units import cm
+    # from reportlab.platypus import Paragraph
+    # from reportlab.lib.styles import getSampleStyleSheet
+
+    styles = getSampleStyleSheet()
+
+    # data = [
+    #     ["11", Paragraph("<b>Cooperativa Eléctrica</b>", styles["BodyText"]),
+    #     Paragraph("<b><i>No debemos resolverlas</i></b>", styles["BodyText"])],
+    # ]
+
+    data = [
+         ["11", Paragraph("<b>Cooperativa Eléctrica</b>", styles["BodyText"]),
+        Paragraph("<b><i>No debemos resolverlas</i></b>", styles["BodyText"])],
+        ["11", "Cooperativa Eléctrica", "No debemos resolverlas"],
+        ["6", "EDESTE", "No debemos resolverlas"],
+        ["39", "Telemedición ESG", "Reclamado a T2 NORTE"],
+        ["19", "OSL", "A la espera de resolución de orden"],
+        ["2", "Contraste", "A la espera de resolución de orden"],
+        ["35", "Cambio de medidor no\nactualizado en OPEN", "Reclamado a T2 NORTE"],
+         ["1", Paragraph("<b>Sistemas</b>", styles["BodyText"]),
+        Paragraph("<b><i>A la espera de resolución de error en OPEN</i></b>", styles["BodyText"])],
+        # ["1", "Sistemas", "A la espera de resolución de error en OPEN"],
+        # ["1", "Débito automático", "A la espera de resolución de Créditos y Cobranzas"],
+        ["1", Paragraph("Débito automático", styles["BodyText"]),
+        Paragraph("<i>A la espera de resolución de Créditos y Cobranzas</i>", styles["BodyText"])],
+        ["16", "Pendientes de análisis", "-"],
+    ]
+
+    tabla_anomalias = Table(
+        data,
+        colWidths=[1.5*cm, 6*cm, 7*cm]
+    )
+
+    tabla_anomalias.setStyle(TableStyle([
+        ("GRID", (0, 0), (-1, -1), 0.8, colors.grey),
+
+        ("BACKGROUND", (0, 0), (-1, -1), colors.whitesmoke),
+
+        ("FONTNAME", (1, 0), (1, 4), "Helvetica-Bold"),
+        ("FONTNAME", (2, 0), (2, 1), "Helvetica-Bold"),
+
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+
+        ("ALIGN", (0, 0), (0, -1), "LEFT"),
+        ("ALIGN", (1, 0), (-1, -1), "LEFT"),
+
+        ("FONTSIZE", (0, 0), (-1, -1), 11),
+
+        ("LEFTPADDING", (0, 0), (-1, -1), 6),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+        ("TOPPADDING", (0, 0), (-1, -1), 8),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+    ]))
+
+    elements.append(tabla_anomalias)
+    elements.append(Spacer(1, 10))
+
+
+    ######DINAMICOOOOOOOOOOOO
+    # data = df_anomalias.values.tolist()
+
+    # tabla_anomalias = Table(
+    #     data,
+    #     colWidths=[1.5*cm, 6*cm, 7*cm]
+    # )
+
+
+
+
+
+
+
+
     # ==========================================
     # TITULO CENTRADO
     # ==========================================
@@ -1269,7 +1356,7 @@ def header_footer(canvas, doc):
     logo_path = BASE_DIR / "img" / "edemsa_logo.JPG"
     canvas.drawImage(
     logo_path,
-    2*cm - 2*cm,
+    width - 4 * cm,
     height - 2.2*cm,
     width=2*cm,
     height=1.5*cm,
