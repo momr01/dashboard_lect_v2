@@ -2213,7 +2213,7 @@ elif st.session_state.page == "detalle":
 # )
 
 
-pdf = generar_pdf()
+pdf = generar_pdf(realvsprog, df_filtrado, kpi_atraso, kpi_reglamentarios, avance_descarga, porcentaje_pendientes, lecturas_descargadas, lecturas_pendientes_total)
 
 st.download_button(
     label="📄 Descargar Reporte",
